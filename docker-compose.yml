@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  # =====================================================
+  # PostgreSQL Database
+  # =====================================================
+  db:
+    image: postgres:16-alpine
+    container_name: buono_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: buono_tax_invoice
+      POSTGRES_USER: buono_admin
+      POSTGRES_PASSWORD: buono_secure_2026
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations/001_create_customers.sql:/docker-entrypoint-initdb.d/001_create_customers.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U buono_admin -d buono_tax_invoice"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

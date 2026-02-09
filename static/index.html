@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f0f2f5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ออกใบกำกับภาษี - Buono Dine & Wine</title>
+    <style>
+        /* ===== Reset & Base ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans Thai', sans-serif;
+            background-color: #f0f2f5;
+            color: #2c3e50;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-box-align: start;
+            -ms-flex-align: start;
+            align-items: flex-start;
+            padding: 24px 16px;
+            padding: 24px max(16px, env(safe-area-inset-left)) 24px max(16px, env(safe-area-inset-right));
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        html {
+            height: -webkit-fill-available;
+        }
+
+        /* ===== Card Container ===== */
+        .card {
+            background: #ffffff;
+            border: 1px solid #e2e6ea;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 540px;
+            padding: 32px;
+            margin-top: 12px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        /* ===== Header ===== */
+        .card-header {
+            text-align: center;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ebeef1;
+        }
+
+        .card-header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a2e;
+            letter-spacing: -0.2px;
+        }
+
+        .card-header .subtitle {
+            font-size: 13px;
+            color: #8a94a6;
+            margin-top: 4px;
+        }
+
+        /* ===== Section ===== */
+        .section {
+            margin-bottom: 18px;
+        }
+
+        .section-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .section-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .section-label .required-star {
+            color: #e53e3e;
+            margin-left: 2px;
+        }
+
+        .section-action {
+            font-size: 13px;
+            font-weight: 500;
+            color: #4a7cbc;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .section-action:hover {
+            background: #edf2f7;
+            color: #2b5a8c;
+        }
+
+        /* ===== Input ===== */
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 16px; /* prevent iOS zoom on focus */
+            font-family: inherit;
+            color: #2c3e50;
+            -webkit-transition: border-color 0.15s, box-shadow 0.15s;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none;
+            background: #fff;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .input-group input::placeholder,
+        .input-group textarea::placeholder {
+            color: #b0b8c4;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            border-color: #6b9fd4;
+            -webkit-box-shadow: 0 0 0 3px rgba(107, 159, 212, 0.12);
+            box-shadow: 0 0 0 3px rgba(107, 159, 212, 0.12);
+        }
+
+        .input-group input.error,
+        .input-group textarea.error {
+            border-color: #e53e3e;
+            box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.08);
+        }
+
+        .input-group textarea {
+            min-height: 88px;
+            resize: vertical;
+        }
+
+        .input-group .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.15s;
+        }
+
+        .input-group .search-icon:hover {
+            color: #4a7cbc;
+        }
+
+        .error-text {
+            color: #e53e3e;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-text.show {
+            display: block;
+        }
+
+        /* ===== Two Column ===== */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        /* ===== Buttons ===== */
+        .btn-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #ebeef1;
+        }
+
+        .btn-cancel {
+            font-size: 14px;
+            font-weight: 500;
+            color: #64748b;
+            background: #fff;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+            padding: 9px 22px;
+            border-radius: 6px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .btn-cancel:hover {
+            background: #f8f9fa;
+            border-color: #b0b8c4;
+        }
+
+        .btn-save {
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            background: #4a7cbc;
+            border: none;
+            cursor: pointer;
+            padding: 9px 32px;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .btn-save:hover {
+            background: #3b6aa0;
+        }
+
+        .btn-save:active {
+            background: #2f5785;
+        }
+
+        .btn-save:disabled {
+            background: #c3cdd8;
+            cursor: not-allowed;
+        }
+
+        /* ===== Toast Notification ===== */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 1000;
+            -webkit-transform: translateX(400px);
+            transform: translateX(400px);
+            -webkit-transition: -webkit-transform 0.25s ease;
+            transition: transform 0.25s ease;
+            max-width: 340px;
+            -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        .toast.show {
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: #48bb78;
+        }
+
+        .toast.error {
+            background: #e53e3e;
+        }
+
+        .toast.info {
+            background: #4a7cbc;
+        }
+
+        /* ===== Loading Spinner ===== */
+        .spinner {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        @-webkit-keyframes spin {
+            to { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+        }
+        @keyframes spin {
+            to { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+        }
+
+        /* ===== Status Badge ===== */
+        .status-badge {
+            display: none;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .status-badge.new {
+            background: #e6f7ed;
+            color: #276749;
+            display: inline-block;
+        }
+
+        .status-badge.edit {
+            background: #ebf2fa;
+            color: #2b5a8c;
+            display: inline-block;
+        }
+
+        /* ===== Responsive - Mobile (< 480px) ===== */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px 8px;
+                padding: 12px max(8px, env(safe-area-inset-left)) 12px max(8px, env(safe-area-inset-right));
+            }
+
+            .card {
+                padding: 20px 16px;
+                border-radius: 6px;
+                margin-top: 4px;
+                border-left: none;
+                border-right: none;
+                border-radius: 0;
+            }
+
+            .card-header h1 {
+                font-size: 18px;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .section-label {
+                font-size: 13px;
+            }
+
+            .btn-row {
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: reverse;
+                -ms-flex-direction: column-reverse;
+                flex-direction: column-reverse;
+                gap: 8px;
+            }
+
+            .btn-save,
+            .btn-cancel {
+                width: 100%;
+                text-align: center;
+                padding: 12px 16px;
+                font-size: 15px;
+            }
+
+            .toast {
+                left: 12px;
+                right: 12px;
+                max-width: none;
+                top: auto;
+                bottom: 20px;
+                bottom: calc(20px + env(safe-area-inset-bottom));
+                -webkit-transform: translateY(200px);
+                transform: translateY(200px);
+            }
+
+            .toast.show {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== Responsive - Tablet (481px - 768px) ===== */
+        @media (min-width: 481px) and (max-width: 768px) {
+            body {
+                padding: 20px 24px;
+            }
+
+            .card {
+                max-width: 520px;
+                padding: 28px 24px;
+            }
+        }
+
+        /* ===== Responsive - Laptop / Desktop (769px+) ===== */
+        @media (min-width: 769px) {
+            .card {
+                max-width: 540px;
+            }
+        }
+
+        /* ===== Responsive - Large Desktop (1200px+) ===== */
+        @media (min-width: 1200px) {
+            body {
+                padding: 40px 16px;
+            }
+
+            .card {
+                max-width: 560px;
+            }
+        }
+
+        /* ===== Touch device enhancements ===== */
+        @media (hover: none) and (pointer: coarse) {
+            .section-action {
+                min-height: 44px;
+                min-width: 44px;
+                display: -webkit-inline-box;
+                display: -ms-inline-flexbox;
+                display: inline-flex;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                -webkit-box-pack: center;
+                -ms-flex-pack: center;
+                justify-content: center;
+            }
+
+            .search-icon {
+                min-height: 44px;
+                min-width: 44px;
+                display: -webkit-inline-box;
+                display: -ms-inline-flexbox;
+                display: inline-flex;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                -webkit-box-pack: center;
+                -ms-flex-pack: center;
+                justify-content: center;
+            }
+
+            .btn-save,
+            .btn-cancel {
+                min-height: 44px;
+            }
+        }
+
+        /* ===== Print ===== */
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+            .card {
+                box-shadow: none;
+                border: none;
+                max-width: 100%;
+            }
+            .btn-row,
+            .section-action,
+            .search-icon,
+            .toast {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Main Card -->
+    <div class="card">
+        <!-- Header -->
+        <div class="card-header">
+            <h1>ออกใบกำกับภาษี</h1>
+            <div class="subtitle">Buono Dine &amp; Wine</div>
+        </div>
+
+        <!-- ===== ช่องค้นหา ===== -->
+        <div class="section">
+            <div class="section-row">
+                <span class="section-label">เลขผู้เสียภาษี หรือ เบอร์โทร</span>
+                <button class="section-action" onclick="searchCustomer()">ค้นหา</button>
+            </div>
+            <div class="input-group">
+                <input type="text" id="searchInput" placeholder="เลขผู้เสียภาษี 13 หลัก หรือ เบอร์โทร"
+                       onkeydown="if(event.key==='Enter') searchCustomer()">
+                <span class="search-icon" onclick="searchCustomer()">&#128269;</span>
+            </div>
+        </div>
+
+        <!-- ===== ชื่อบริษัท ===== -->
+        <div class="section">
+            <div class="section-row">
+                <span class="section-label">ชื่อบริษัท หรือ นามบุคคล <span class="required-star">*</span></span>
+                <span id="statusBadge" class="status-badge"></span>
+            </div>
+            <div class="input-group">
+                <input type="text" id="nameInput" placeholder="ชื่อบริษัท หรือ ชื่อ-นามสกุล">
+                <div class="error-text" id="nameError"></div>
+            </div>
+        </div>
+
+        <!-- ===== เลขผู้เสียภาษี + สาขา ===== -->
+        <div class="section">
+            <div class="two-col">
+                <div>
+                    <div class="section-row">
+                        <span class="section-label">เลขผู้เสียภาษี <span class="required-star">*</span></span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="taxIdInput" maxlength="13" placeholder="เลข 13 หลัก"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        <div class="error-text" id="taxIdError"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="section-row">
+                        <span class="section-label">สาขา</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="branchInput" placeholder="00000 (สำนักงานใหญ่)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ที่อยู่ ===== -->
+        <div class="section">
+            <div class="section-row">
+                <span class="section-label">ที่อยู่ <span class="required-star">*</span></span>
+            </div>
+            <div class="input-group">
+                <textarea id="addressInput" placeholder="ที่อยู่สำหรับออกใบกำกับภาษี"></textarea>
+                <div class="error-text" id="addressError"></div>
+            </div>
+        </div>
+
+        <!-- ===== เบอร์โทร ===== -->
+        <div class="section">
+            <div class="section-row">
+                <span class="section-label">เบอร์โทร</span>
+            </div>
+            <div class="input-group">
+                <input type="text" id="phoneInput" maxlength="15" placeholder="0XX-XXX-XXXX"
+                       oninput="this.value = this.value.replace(/[^0-9\-\+]/g, '')">
+                <div class="error-text" id="phoneError"></div>
+            </div>
+        </div>
+
+        <!-- ===== Buttons ===== -->
+        <div class="btn-row">
+            <button class="btn-cancel" onclick="resetForm()">ยกเลิก</button>
+            <button class="btn-save" id="saveBtn" onclick="saveCustomer()">
+                บันทึก
+                <span class="spinner" id="saveSpinner"></span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ===== State =====
+        let currentCustomerId = 0;
+        const API_BASE = '/api/customer';
+
+        // ===== ค้นหาข้อมูล =====
+        async function searchCustomer() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                showToast('กรุณากรอกเลขผู้เสียภาษี หรือ เบอร์โทร', 'error');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`);
+                const data = await res.json();
+
+                if (data.found && data.customer) {
+                    fillForm(data.customer);
+                    showToast('พบข้อมูลลูกค้า — สามารถแก้ไขแล้วกดบันทึกได้', 'success');
+                } else {
+                    clearFormFields();
+                    showToast('ไม่พบข้อมูล — กรุณากรอกข้อมูลใหม่เพื่อบันทึก', 'info');
+                }
+            } catch (err) {
+                showToast('เกิดข้อผิดพลาดในการค้นหา กรุณาลองใหม่', 'error');
+                console.error('Search error:', err);
+            }
+        }
+
+        // ===== บันทึก/แก้ไขข้อมูล =====
+        async function saveCustomer() {
+            clearErrors();
+
+            const body = {
+                name: document.getElementById('nameInput').value.trim(),
+                tax_id: document.getElementById('taxIdInput').value.trim(),
+                branch_code: document.getElementById('branchInput').value.trim() || '00000',
+                address: document.getElementById('addressInput').value.trim(),
+                phone_number: document.getElementById('phoneInput').value.trim(),
+            };
+
+            if (currentCustomerId > 0) {
+                body.id = currentCustomerId;
+            }
+
+            let hasError = false;
+            if (!body.name) {
+                showFieldError('nameError', 'กรุณากรอกชื่อบริษัท หรือ นามบุคคล');
+                hasError = true;
+            }
+            if (!body.tax_id || body.tax_id.length !== 13 || !/^\d{13}$/.test(body.tax_id)) {
+                showFieldError('taxIdError', 'กรุณากรอกเลขผู้เสียภาษี 13 หลัก (ตัวเลขเท่านั้น)');
+                hasError = true;
+            }
+            if (!body.address) {
+                showFieldError('addressError', 'กรุณากรอกที่อยู่');
+                hasError = true;
+            }
+            if (body.phone_number && !/^[\d\-\+]{9,15}$/.test(body.phone_number)) {
+                showFieldError('phoneError', 'รูปแบบเบอร์โทรไม่ถูกต้อง');
+                hasError = true;
+            }
+            if (hasError) return;
+
+            const btn = document.getElementById('saveBtn');
+            const spinner = document.getElementById('saveSpinner');
+            btn.disabled = true;
+            spinner.style.display = 'inline-block';
+
+            try {
+                const res = await fetch(`${API_BASE}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    if (data.data) {
+                        currentCustomerId = data.data.id;
+                        updateStatusBadge('edit');
+                    }
+                    showToast(data.message, 'success');
+                } else {
+                    showToast(data.message, 'error');
+                    if (data.errors) {
+                        for (const [field, msg] of Object.entries(data.errors)) {
+                            showFieldError(field + 'Error', msg);
+                        }
+                    }
+                }
+            } catch (err) {
+                showToast('เกิดข้อผิดพลาด กรุณาลองใหม่', 'error');
+                console.error('Save error:', err);
+            } finally {
+                btn.disabled = false;
+                spinner.style.display = 'none';
+            }
+        }
+
+        // ===== Fill Form =====
+        function fillForm(customer) {
+            currentCustomerId = customer.id;
+            document.getElementById('nameInput').value = customer.name || '';
+            document.getElementById('taxIdInput').value = customer.tax_id || '';
+            document.getElementById('branchInput').value = customer.branch_code || '00000';
+            document.getElementById('addressInput').value = customer.address || '';
+            document.getElementById('phoneInput').value = customer.phone_number || '';
+            updateStatusBadge('edit');
+            clearErrors();
+        }
+
+        // ===== Clear/Reset =====
+        function clearFormFields() {
+            currentCustomerId = 0;
+            document.getElementById('nameInput').value = '';
+            document.getElementById('taxIdInput').value = '';
+            document.getElementById('branchInput').value = '';
+            document.getElementById('addressInput').value = '';
+            document.getElementById('phoneInput').value = '';
+            updateStatusBadge('new');
+            clearErrors();
+        }
+
+        function resetForm() {
+            currentCustomerId = 0;
+            document.getElementById('searchInput').value = '';
+            clearFormFields();
+            updateStatusBadge('');
+            showToast('ล้างข้อมูลแล้ว', 'info');
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-text').forEach(el => {
+                el.textContent = '';
+                el.classList.remove('show');
+            });
+            document.querySelectorAll('input.error, textarea.error').forEach(el => {
+                el.classList.remove('error');
+            });
+        }
+
+        // ===== UI Helpers =====
+        function showFieldError(elementId, message) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.textContent = message;
+                el.classList.add('show');
+                const input = el.parentElement.querySelector('input, textarea');
+                if (input) input.classList.add('error');
+            }
+        }
+
+        function updateStatusBadge(mode) {
+            const badge = document.getElementById('statusBadge');
+            badge.className = 'status-badge';
+            if (mode === 'new') {
+                badge.textContent = 'สร้างใหม่';
+                badge.classList.add('new');
+            } else if (mode === 'edit') {
+                badge.textContent = 'แก้ไข #' + currentCustomerId;
+                badge.classList.add('edit');
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type + ' show';
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
