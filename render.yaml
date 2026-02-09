@@ -2,6 +2,7 @@ services:
   - type: web
     name: buono-tax-invoice
     runtime: docker
+    plan: free
     dockerfilePath: ./Dockerfile
     envVars:
       - key: DATABASE_URL
@@ -13,6 +14,6 @@ services:
 
 databases:
   - name: buono-db
-    plan: free
     databaseName: buono_tax_invoice
     user: buono_admin
+    plan: basic-256mb
