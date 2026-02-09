@@ -16,4 +16,4 @@ databases:
   - name: buono-db
     databaseName: buono_tax_invoice
     user: buono_admin
-    plan: basic-256mb
+    plan: free
